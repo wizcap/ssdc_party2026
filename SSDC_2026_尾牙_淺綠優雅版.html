@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSDC 澄毓綠建築 2026 尾牙</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(180deg, 
+        #f8fdf8 0%,
+        #eef9ee 20%,
+        #e5f5e8 40%,
+        #dff2e4 60%,
+        #d8eedd 80%,
+        #d0e9d6 100%
+      );
+    }
+
+    /* ===== 背景光暈 ===== */
+    .bg-glow-1 {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(180, 220, 180, 0.4) 0%, transparent 60%);
+      filter: blur(80px);
+    }
+
+    .bg-glow-2 {
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 900px;
+      height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200, 230, 200, 0.5) 0%, transparent 60%);
+      filter: blur(100px);
+    }
+
+    .bg-glow-3 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+      filter: blur(60px);
+    }
+
+    /* ===== 頂部標籤 ===== */
+    .top-badge {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 30px;
+      border: 1px solid rgba(120, 160, 120, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      z-index: 100;
+      animation: fadeDown 1s ease-out 0.3s forwards;
+    }
+
+    .top-badge span {
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: #5a7a5a;
+      font-weight: 500;
+    }
+
+    .top-badge .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d4a84b, #c49a3d);
+      box-shadow: 0 0 10px rgba(212, 168, 75, 0.5);
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ===== 主要內容區 ===== */
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    /* ===== 公司名稱 ===== */
+    .company {
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.6s forwards;
+    }
+
+    .company-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 130px;
+      font-weight: 600;
+      letter-spacing: 20px;
+      color: #4a6a4a;
+      line-height: 1;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* SSDC 的 C 上面的小點 */
+    .company-en::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      right: 25px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7cb87c, #5a9a5a);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .company-zh {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: 15px;
+      color: #5a7a5a;
+      margin-bottom: 8px;
+    }
+
+    .company-en-sub {
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: #8aaa8a;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .company-en-sub::before,
+    .company-en-sub::after {
+      content: '';
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(120, 160, 120, 0.5), transparent);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== 年份圓環區塊 ===== */
+    .year-section {
+      margin-top: 60px;
+      position: relative;
+      opacity: 0;
+      animation: scaleIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 1s forwards;
+    }
+
+    .year-ring {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 外圈 */
+    .year-ring::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(120, 160, 120, 0.25);
+    }
+
+    /* 內圈 */
+    .year-ring::after {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(120, 160, 120, 0.15);
+    }
+
+    .year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 100px;
+      font-weight: 500;
+      letter-spacing: 8px;
+      background: linear-gradient(180deg, 
+        #c9a857 0%,
+        #b8943d 50%,
+        #a68530 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      position: relative;
+    }
+
+    /* 年份左右的小星星 */
+    .year::before {
+      content: '✦';
+      position: absolute;
+      left: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #c9a857;
+      -webkit-text-fill-color: #c9a857;
+      animation: starTwinkle 2s ease-in-out infinite;
+    }
+
+    .year::after {
+      content: '✦';
+      position: absolute;
+      right: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #c9a857;
+      -webkit-text-fill-color: #c9a857;
+      animation: starTwinkle 2s ease-in-out infinite 0.5s;
+    }
+
+    @keyframes starTwinkle {
+      0%, 100% { opacity: 0.4; transform: translateY(-50%) scale(0.8); }
+      50% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+    }
+
+    .event-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: 20px;
+      color: #6a8a6a;
+      margin-top: 10px;
+    }
+
+    @keyframes scaleIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ===== 角落裝飾 ===== */
+    .corner-tl {
+      top: 30px;
+      left: 30px;
+      border-top: 1px solid rgba(120, 160, 120, 0.3);
+      border-left: 1px solid rgba(120, 160, 120, 0.3);
+    }
+
+    .corner-tr {
+      top: 30px;
+      right: 30px;
+      border-top: 1px solid rgba(120, 160, 120, 0.3);
+      border-right: 1px solid rgba(120, 160, 120, 0.3);
+    }
+
+    .corner-bl {
+      bottom: 30px;
+      left: 30px;
+      border-bottom: 1px solid rgba(120, 160, 120, 0.3);
+      border-left: 1px solid rgba(120, 160, 120, 0.3);
+    }
+
+    .corner-br {
+      bottom: 30px;
+      right: 30px;
+      border-bottom: 1px solid rgba(120, 160, 120, 0.3);
+      border-right: 1px solid rgba(120, 160, 120, 0.3);
+    }
+
+    @keyframes cornerFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .corner {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      opacity: 0;
+      animation: cornerFade 1s ease-out 1.4s forwards;
+    }
+
+    /* ===== 底部橫線 ===== */
+    .bottom-line {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(120, 160, 120, 0.3) 20%, 
+        rgba(120, 160, 120, 0.3) 80%, 
+        transparent
+      );
+      opacity: 0;
+      animation: lineExpand 1s ease-out 1.6s forwards;
+    }
+
+    @keyframes lineExpand {
+      from { opacity: 0; width: 0; }
+      to { opacity: 1; width: 80%; }
+    }
+
+    /* ===== 浮動小點裝飾 ===== */
+    .floating-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(120, 180, 120, 0.4);
+      animation: floatDot 6s ease-in-out infinite;
+    }
+
+    @keyframes floatDot {
+      0%, 100% { transform: translateY(0); opacity: 0.3; }
+      50% { transform: translateY(-15px); opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 背景光暈 -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    <div class="bg-glow-3"></div>
+
+    <!-- 頂部標籤 -->
+    <div class="top-badge">
+      <span>ANNUAL CELEBRATION</span>
+      <div class="dot"></div>
+      <span>2026</span>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="content">
+      <!-- 公司名稱 -->
+      <div class="company">
+        <div class="company-en">SSDC</div>
+        <div class="company-zh">澄 毓 綠 建 築 設 計 顧 問</div>
+        <div class="company-en-sub">GREEN BUILDING CONSULTANT</div>
+      </div>
+
+      <!-- 年份區塊 -->
+      <div class="year-section">
+        <div class="year-ring">
+          <div class="year">2026</div>
+          <div class="event-name">年 終 尾 牙</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 角落裝飾 -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- 底部橫線 -->
+    <div class="bottom-line"></div>
+
+    <!-- 浮動小點 -->
+    <div class="floating-dot" style="top: 20%; left: 15%; width: 8px; height: 8px; animation-delay: 0s;"></div>
+    <div class="floating-dot" style="top: 35%; right: 12%; width: 6px; height: 6px; animation-delay: 1s;"></div>
+    <div class="floating-dot" style="bottom: 25%; left: 10%; width: 10px; height: 10px; animation-delay: 2s;"></div>
+    <div class="floating-dot" style="bottom: 40%; right: 18%; width: 7px; height: 7px; animation-delay: 0.5s;"></div>
+    <div class="floating-dot" style="top: 60%; left: 20%; width: 5px; height: 5px; animation-delay: 1.5s;"></div>
+  </div>
+</body>
+</html>
