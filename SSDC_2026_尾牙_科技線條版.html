@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSDC 澄毓綠建築設計顧問 2026 尾牙</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+      background: #0a1510;
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: 
+        /* 右側大面積淺色漸層（更明顯） */
+        linear-gradient(270deg, 
+          rgba(200, 235, 220, 0.35) 0%,
+          rgba(180, 220, 205, 0.28) 10%,
+          rgba(160, 205, 190, 0.18) 25%,
+          rgba(140, 190, 175, 0.08) 40%,
+          transparent 60%
+        ),
+        /* 右上角額外加亮 */
+        radial-gradient(ellipse 50% 50% at 90% 10%, 
+          rgba(210, 240, 225, 0.3) 0%,
+          rgba(190, 225, 210, 0.15) 40%,
+          transparent 70%
+        ),
+        /* 上方淺色帶 */
+        linear-gradient(180deg,
+          rgba(195, 230, 215, 0.2) 0%,
+          rgba(180, 220, 205, 0.1) 15%,
+          transparent 35%
+        ),
+        /* 右下角淺色 */
+        radial-gradient(ellipse 40% 35% at 85% 85%,
+          rgba(190, 225, 210, 0.2) 0%,
+          rgba(170, 210, 195, 0.1) 50%,
+          transparent 80%
+        ),
+        /* 基底深色漸層 */
+        linear-gradient(160deg, 
+          #0f1f1a 0%,
+          #0a1812 40%,
+          #071410 70%,
+          #050f0c 100%
+        );
+    }
+
+    /* ===== 3D 線框球體 ===== */
+    .wireframe-globe {
+      position: absolute;
+      top: 50%;
+      right: 8%;
+      transform: translateY(-50%);
+      width: 400px;
+      height: 400px;
+      opacity: 0;
+      animation: globeFadeIn 2s ease-out 0.5s forwards;
+    }
+
+    .wireframe-globe svg {
+      width: 100%;
+      height: 100%;
+      animation: globeRotate 30s linear infinite;
+    }
+
+    @keyframes globeFadeIn {
+      from { opacity: 0; transform: translateY(-50%) scale(0.8); }
+      to { opacity: 1; transform: translateY(-50%) scale(1); }
+    }
+
+    @keyframes globeRotate {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    /* ===== 階梯式時間軸線條（左側） ===== */
+    .timeline-lines {
+      position: absolute;
+      left: 5%;
+      top: 15%;
+      height: 70%;
+      width: 200px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease-out 0.8s forwards;
+    }
+
+    .timeline-step {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .timeline-step .line {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.6), rgba(16, 185, 129, 0.1));
+    }
+
+    .timeline-step .dot {
+      width: 6px;
+      height: 6px;
+      background: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    }
+
+    .timeline-step .label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      color: rgba(16, 185, 129, 0.6);
+      letter-spacing: 2px;
+    }
+
+    .timeline-step:nth-child(1) { top: 0; }
+    .timeline-step:nth-child(1) .line { width: 80px; }
+    
+    .timeline-step:nth-child(2) { top: 20%; }
+    .timeline-step:nth-child(2) .line { width: 120px; }
+    
+    .timeline-step:nth-child(3) { top: 40%; }
+    .timeline-step:nth-child(3) .line { width: 160px; }
+    
+    .timeline-step:nth-child(4) { top: 60%; }
+    .timeline-step:nth-child(4) .line { width: 140px; }
+    
+    .timeline-step:nth-child(5) { top: 80%; }
+    .timeline-step:nth-child(5) .line { width: 100px; }
+
+    /* 垂直連接線 */
+    .timeline-vertical {
+      position: absolute;
+      left: 3px;
+      top: 6px;
+      width: 1px;
+      height: calc(80% - 6px);
+      background: linear-gradient(180deg, 
+        rgba(16, 185, 129, 0.4),
+        rgba(16, 185, 129, 0.2) 50%,
+        rgba(16, 185, 129, 0.4)
+      );
+    }
+
+    /* ===== 網格底紋 ===== */
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(150, 200, 185, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(150, 200, 185, 0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    /* ===== 水平科技線條 ===== */
+    .h-tech-lines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .h-line {
+      position: absolute;
+      left: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent,
+        rgba(160, 210, 195, 0.35) 10%,
+        rgba(140, 195, 180, 0.2) 30%,
+        transparent 60%
+      );
+    }
+
+    .h-line:nth-child(1) { top: 12%; width: 45%; }
+    .h-line:nth-child(2) { top: 28%; width: 35%; }
+    .h-line:nth-child(3) { top: 72%; width: 40%; }
+    .h-line:nth-child(4) { top: 88%; width: 50%; }
+
+    .h-line-r {
+      position: absolute;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(270deg, 
+        transparent,
+        rgba(160, 210, 195, 0.3) 10%,
+        rgba(140, 195, 180, 0.15) 30%,
+        transparent 60%
+      );
+    }
+
+    .h-line-r:nth-child(5) { top: 20%; width: 30%; }
+    .h-line-r:nth-child(6) { top: 45%; width: 25%; }
+    .h-line-r:nth-child(7) { top: 80%; width: 35%; }
+
+    /* ===== 數據點裝飾 ===== */
+    .data-points {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .data-point {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: dataFadeIn 1s ease-out forwards;
+    }
+
+    .data-point .num {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: rgba(16, 185, 129, 0.4);
+    }
+
+    .data-point .unit {
+      font-size: 12px;
+      color: rgba(16, 185, 129, 0.3);
+      letter-spacing: 1px;
+    }
+
+    .data-point:nth-child(1) { bottom: 15%; left: 8%; animation-delay: 1.5s; }
+    .data-point:nth-child(2) { bottom: 25%; left: 15%; animation-delay: 1.8s; }
+    .data-point:nth-child(3) { top: 18%; right: 12%; animation-delay: 2s; }
+
+    @keyframes dataFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== 柔和光暈 ===== */
+    .main-glow {
+      position: absolute;
+      top: 45%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      width: 1000px;
+      height: 1000px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(180, 220, 205, 0.15) 0%,
+        rgba(150, 200, 185, 0.08) 35%,
+        rgba(120, 180, 165, 0.03) 60%,
+        transparent 80%
+      );
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    /* ===== 主要內容區 ===== */
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 40%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 20;
+    }
+
+    /* ===== 企業名稱（上方）===== */
+    .company {
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: slideDown 1s ease-out 1s forwards;
+      margin-bottom: 15px;
+    }
+
+    .company-en {
+      font-family: 'Playfair Display', serif;
+      font-size: 120px;
+      font-weight: 500;
+      letter-spacing: 12px;
+      background: linear-gradient(180deg, 
+        #ffffff 0%,
+        #d0f0e0 40%,
+        #6EE7B7 70%,
+        #10B981 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.3));
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .company-zh {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 8px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== 分隔裝飾 ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 35px 0;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out 1.4s forwards;
+    }
+
+    .divider-line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.4), transparent);
+    }
+
+    .divider-dot {
+      width: 6px;
+      height: 6px;
+      background: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ===== 年份區塊（下方）- 縮小版 ===== */
+    .year-block {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 1s ease-out 1.6s forwards;
+    }
+
+    .year {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 90px;
+      font-weight: 600;
+      letter-spacing: 8px;
+      background: linear-gradient(180deg, 
+        #FFF8DC 0%,
+        #F5E6A3 30%,
+        #D4B95E 60%,
+        #BFA14A 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 20px rgba(212, 185, 94, 0.4));
+      line-height: 1;
+      position: relative;
+      display: inline-block;
+    }
+
+    .year-star {
+      position: absolute;
+      top: 8px;
+      right: -25px;
+      font-size: 18px;
+      color: #F5E6A3;
+      filter: drop-shadow(0 0 10px rgba(245, 230, 163, 0.8));
+      animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2.2s both, 
+                 starShine 2s ease-in-out 2.7s infinite;
+    }
+
+    .event-name {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: 18px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 8px;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    @keyframes starShine {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(245, 230, 163, 0.8)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 20px rgba(245, 230, 163, 1)); transform: scale(1.15); }
+    }
+
+    /* ===== 角落裝飾 ===== */
+    .corner {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+      animation: cornerFade 0.8s ease-out 2s forwards;
+    }
+
+    .corner::before,
+    .corner::after {
+      content: '';
+      position: absolute;
+      background: rgba(16, 185, 129, 0.3);
+    }
+
+    .corner-tl { top: 25px; left: 25px; }
+    .corner-tl::before { top: 0; left: 0; width: 50px; height: 1px; }
+    .corner-tl::after { top: 0; left: 0; width: 1px; height: 50px; }
+
+    .corner-tr { top: 25px; right: 25px; }
+    .corner-tr::before { top: 0; right: 0; width: 50px; height: 1px; }
+    .corner-tr::after { top: 0; right: 0; width: 1px; height: 50px; }
+
+    .corner-bl { bottom: 25px; left: 25px; }
+    .corner-bl::before { bottom: 0; left: 0; width: 50px; height: 1px; }
+    .corner-bl::after { bottom: 0; left: 0; width: 1px; height: 50px; }
+
+    .corner-br { bottom: 25px; right: 25px; }
+    .corner-br::before { bottom: 0; right: 0; width: 50px; height: 1px; }
+    .corner-br::after { bottom: 0; right: 0; width: 1px; height: 50px; }
+
+    @keyframes cornerFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ===== 底部漸層線 ===== */
+    .bottom-gradient {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03));
+      pointer-events: none;
+    }
+
+    /* ===== 浮動粒子 ===== */
+    .particle {
+      position: absolute;
+      background: #10B981;
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat 12s ease-in-out infinite;
+    }
+
+    @keyframes particleFloat {
+      0% { opacity: 0; transform: translateY(100vh); }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
+      100% { opacity: 0; transform: translateY(-100vh); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 網格底紋 -->
+    <div class="grid-pattern"></div>
+
+    <!-- 柔和光暈 -->
+    <div class="main-glow"></div>
+
+    <!-- 水平科技線條 -->
+    <div class="h-tech-lines">
+      <div class="h-line"></div>
+      <div class="h-line"></div>
+      <div class="h-line"></div>
+      <div class="h-line"></div>
+      <div class="h-line-r"></div>
+      <div class="h-line-r"></div>
+      <div class="h-line-r"></div>
+    </div>
+
+    <!-- 階梯式時間軸（左側） -->
+    <div class="timeline-lines">
+      <div class="timeline-vertical"></div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="line"></div>
+        <div class="label">2008</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="line"></div>
+        <div class="label">2015</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="line"></div>
+        <div class="label">2020</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="line"></div>
+        <div class="label">2025</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="line"></div>
+        <div class="label">2026</div>
+      </div>
+    </div>
+
+    <!-- 3D 線框球體（右側） -->
+    <div class="wireframe-globe">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="globeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#10B981" stop-opacity="0.6"/>
+            <stop offset="50%" stop-color="#6EE7B7" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#10B981" stop-opacity="0.2"/>
+          </linearGradient>
+        </defs>
+        <!-- 外圈 -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="url(#globeGrad)" stroke-width="1"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="0.5"/>
+        <!-- 經線 -->
+        <ellipse cx="100" cy="100" rx="80" ry="30" fill="none" stroke="rgba(16,185,129,0.3)" stroke-width="0.5"/>
+        <ellipse cx="100" cy="100" rx="80" ry="50" fill="none" stroke="rgba(16,185,129,0.25)" stroke-width="0.5"/>
+        <ellipse cx="100" cy="100" rx="80" ry="70" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="0.5"/>
+        <!-- 緯線 -->
+        <ellipse cx="100" cy="100" rx="30" ry="80" fill="none" stroke="rgba(16,185,129,0.3)" stroke-width="0.5"/>
+        <ellipse cx="100" cy="100" rx="55" ry="80" fill="none" stroke="rgba(16,185,129,0.25)" stroke-width="0.5"/>
+        <!-- 斜線裝飾 -->
+        <ellipse cx="100" cy="100" rx="60" ry="80" fill="none" stroke="rgba(16,185,129,0.15)" stroke-width="0.5" transform="rotate(30 100 100)"/>
+        <ellipse cx="100" cy="100" rx="60" ry="80" fill="none" stroke="rgba(16,185,129,0.15)" stroke-width="0.5" transform="rotate(-30 100 100)"/>
+        <!-- 高亮點 -->
+        <circle cx="60" cy="70" r="3" fill="#6EE7B7" opacity="0.6"/>
+        <circle cx="140" cy="90" r="2" fill="#6EE7B7" opacity="0.4"/>
+        <circle cx="100" cy="40" r="2" fill="#6EE7B7" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <!-- 數據點裝飾 -->
+    <div class="data-points">
+      <div class="data-point">
+        <span class="num">1000+</span>
+        <span class="unit">PROJECTS</span>
+      </div>
+      <div class="data-point">
+        <span class="num">17</span>
+        <span class="unit">YEARS</span>
+      </div>
+      <div class="data-point">
+        <span class="num">2050</span>
+        <span class="unit">NET ZERO</span>
+      </div>
+    </div>
+
+    <!-- 浮動粒子 -->
+    <div class="particle" style="left: 10%; width: 3px; height: 3px; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 25%; width: 2px; height: 2px; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 55%; width: 3px; height: 3px; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 75%; width: 2px; height: 2px; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 90%; width: 3px; height: 3px; animation-delay: 3s;"></div>
+
+    <!-- 主要內容 -->
+    <div class="content">
+      <!-- 企業名稱（上方） -->
+      <div class="company">
+        <div class="company-en">SSDC</div>
+        <div class="company-zh">澄毓綠建築設計顧問</div>
+      </div>
+
+      <!-- 分隔裝飾 -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-dot"></div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- 年份區塊（下方）- 縮小版 -->
+      <div class="year-block">
+        <div class="year">
+          2026
+          <span class="year-star">✦</span>
+        </div>
+        <div class="event-name">年 終 尾 牙</div>
+      </div>
+    </div>
+
+    <!-- 角落裝飾 -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- 底部漸層 -->
+    <div class="bottom-gradient"></div>
+  </div>
+</body>
+</html>
